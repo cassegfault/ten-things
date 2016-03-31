@@ -1,12 +1,14 @@
-var dateListApp = {};
+var dateListApp = {
+  monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+};
 var daySize = 86400000;
 
 function offsetDate(date, days) {
-  return new Date(date + days * (daySize));
+  return new Date(date.getTime() + (days * daySize));
 }
 
 function daysBetween(first, second) {
-  return Math.round((second - first) / daySize);
+  return Math.abs(Math.ceil((second.getTime() - first.getTime()) / daySize));
 }
 
 function getFormattedDateString(date) {
@@ -38,21 +40,30 @@ function loadList(dateString) {
 }
 
 function generateDateList(startDate, endDate) {
-  var d = new Date();
+  var d = new Date(dateListApp.date);
   var listEl = document.getElementById("dateList");
-  startDate = startDate || (new Date()).setDate(d.getDate() - 31);
-  endDate = endDate || (new Date()).setDate(d.getDate() + 31);
-  var days = daysBetween(startDate, endDate);
+  startDate = startDate || offsetDate(d,0-d.getDay());  // new Date((new Date()).setDate(d.getDate() - d.getDay()));
+  endDate = endDate || offsetDate(d,6-d.getDay());      // new Date((new Date()).setDate(d.getDate() + (6 - d.getDay())));
+  var days = daysBetween(endDate, startDate);
+  
+  dateListApp.startDate =startDate;
+  dateListApp.endDate = endDate;
 
+  listEl.innerHTML = "";
   for (var x = 0; x <= days; x++) {
     var el = document.createElement("div");
     var currentDate = offsetDate(startDate, x);
     var currentDateString = getFormattedDateString(currentDate);
     el.setAttribute("data-date", currentDateString);
-    el.innerHTML = "<span class='month'>" +
-      (currentDate.getMonth() + 1) +
-      "</span><span class='date'>" +
-      currentDate.getDate() + "</span>";
+    var html = "";
+    
+    if (currentDate.getDate() === 1) {
+      html += "<span class='month'>" + dateListApp.monthNames[currentDate.getMonth()] + "</span>";
+    }
+    
+    html += "<span class='date'>" + currentDate.getDate() + "</span>";
+    
+    el.innerHTML = html;
     if (currentDateString == dateListApp.dateString) {
       el.className = "today";
     }
@@ -64,8 +75,26 @@ function generateDateList(startDate, endDate) {
 }
 
 function toggleDateList() {
-  var el = document.getElementById("dateList");
+  var el = document.getElementById("dateListWrapper"),
+      toggleEl = document.getElementById("dateListToggle");
   el.classList.toggle('show');
+  if(el.classList.contains('show')){
+    toggleEl.innerText = '-';
+  } else {
+    toggleEl.innerText = '+';
+  }
+}
+
+function prevWeek(){
+  var startDate = offsetDate(dateListApp.startDate, -6),
+      endDate = offsetDate(dateListApp.endDate, - 6);
+  generateDateList(startDate, endDate);
+}
+
+function nextWeek(){
+  var startDate = dateListApp.endDate,
+      endDate = offsetDate(dateListApp.endDate, 6);
+  generateDateList(startDate, endDate);
 }
 
 function init() {

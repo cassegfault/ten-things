@@ -9,7 +9,11 @@
 </head>
 
 <body>
-  <div id="dateList"></div>
+  <div id="dateListWrapper">
+    <div id="prevWeek" class="weekButton" onclick="prevWeek()">&laquo;</div>  
+    <div id="dateList"></div>
+    <div id="nextWeek" class="weekButton" onclick="nextWeek()">&raquo;</div>
+  </div>
   <div id="dateListToggle" onclick="toggleDateList()">+</div>
   <div id="date"></div>
   <div id="activeList">

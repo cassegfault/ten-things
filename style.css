@@ -2,6 +2,8 @@
 html,
 body {
   font-family: 'Roboto Condensed', sans-serif;
+  margin:0;
+  padding:0;
 }
 
 #date {
@@ -49,29 +51,55 @@ body {
   outline: none;
 }
 
-#dateList {
+#dateListWrapper {
   width: 50%;
   margin: 0 auto;
   max-height: 0em;
   opacity: 0;
   display: none;
   transition: opacity 100ms, max-height 150ms, display 0s 150ms;
+  text-align: center;
+  border: 1px solid #eaeaea;
+  background: #fafafa;
+  padding: 1em 0;
 }
 
-#dateList.show {
+#dateListWrapper.show {
   max-height: 100em;
   opacity: 1;
   display: block;
 }
 
+#dateListWrapper>div {
+  vertical-align: middle;
+  display:inline-block;
+}
+
+.weekButton {
+  cursor:pointer;
+  color:#666;
+}
+
 #dateListToggle {
   margin-left: 70%;
+  margin-top:-1px;
+  color: #666666;
+  border: 1px solid #eaeaea;
+  background: #fafafa;
+  display: inline-block;
+  width: 2em;
+  height: 1.25em;
+  text-align: center;
+  border-top: 1px solid #fafafa;
+  cursor:pointer;
 }
 
 #dateList>div {
   display: inline-block;
   width: 3vw;
   height: 3vw;
+  min-width:2em;
+  min-height:2em;
   position: relative;
   border-bottom: 1px solid #eaeaea;
 }
@@ -94,9 +122,9 @@ body {
 
 #dateList>div .month {
   top: 5px;
-  left: 2px;
+  left: 5px;
   font-size: 0.5em;
-  color: #eaeaea;
+  color: #666;
 }
 
 #dateList>div .date {
@@ -120,4 +148,13 @@ body {
 
 #saveButton:hover {
   background: #5cC05c;
+}
+
+@media (max-width:768px){
+  #dateListWrapper{
+    width:100%;
+  }
+  #activeList {
+    width:80%;
+  }
 }
